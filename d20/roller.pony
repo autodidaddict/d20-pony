@@ -78,7 +78,10 @@ class Roll
       Iter[EvaluatedTerm](_values.values()).fold[I64]( {(sum: I64,  x: EvaluatedTerm):I64 => sum + x._2.i64() }, 0)      
     else
       0
-    end      
+    end   
+
+  fun rollterms() : Array[EvaluatedTerm] box =>
+    _values   
 
   fun values() : Iterator[EvaluatedTerm] =>
     _values.values() 
@@ -102,7 +105,7 @@ class Roller
           _terms.push(t)          
         end 
     end
-    
+
   fun roll(): Roll =>
     Roll(_expression, _terms)
 

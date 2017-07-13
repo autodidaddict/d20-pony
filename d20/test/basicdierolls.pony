@@ -14,13 +14,15 @@ class BasicDieRolls is UnitTest
       Debug.out(r._1.string() + ":" + r._2.string())
     end 
 
+    h.assert_eq[USize](result.rollterms().size(),2)
     h.assert_true(result.total() >= 7)    
 
-    let r2 = Roller("5d20 +  + 30")
+    let r2 = Roller("5d20 + 30")
     let result2 = r2.roll()
 
     for r in result2.values() do 
       Debug.out(r._1.string() + ":" + r._2.string())
     end 
     
-    h.assert_true(result2.total() >= 35)    
+    h.assert_true(result2.total() >= 35)  
+    h.assert_eq[USize](result2.rollterms().size(),2)  
