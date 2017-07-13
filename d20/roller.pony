@@ -32,27 +32,19 @@ class RollTerm
   var _term: String ref
   var _termvalue: TermValue = 0
 
-  new ref create(term': String) =>
+  new ref create(term': String) =>    
     _term = term'.clone()
     _term.rstrip()
     if _term.lower().contains("d") then
       let components = _term.split("d")
-      try 
-        _termvalue = Die(components(0).i8(), components(1).u8())
+      try         
+        _termvalue = Die(_SmartParser.string_to_i8(components(0)),
+         components(1).u8())
       else
         _termvalue = 0
       end
     else
-      try 
-        _term.replace(" ", "")
-        _term.replace("+", "")
-        let neg = _term.replace("-", "")
-        if neg > 0 then 
-          _termvalue = _term.i8() * -1
-        else 
-          _termvalue = _term.i8()
-        end 
-      end
+      _termvalue = _SmartParser.string_to_i8(_term)     
     end 
 
   fun value() : TermValue box =>
@@ -100,7 +92,7 @@ class Roller
     try
       let r = Regex("([+-]?\\s*\\d+[dD]\\d+|[+-]?\\s*\\d+)")
       let mi = MatchIterator(r, expression)          
-        for m in mi do
+        for m in mi do          
           let t = RollTerm(m(0))
           _terms.push(t)          
         end 
