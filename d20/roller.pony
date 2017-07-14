@@ -8,10 +8,25 @@ use "debug"
 type RollResult is (Roll | None)
 
 type TermValue is (Die box | I8 box)
+  """
+  Die roll terms can be either expressed as numerical constants like `+12`
+  or as a `Die`, which is a combination of a multiplier and number of sides 
+  like `3D12`
+  """
 
 type EvaluatedTerm is (RollTerm box, I32)
+  """
+  An evaluated term is a tuple that pairs the originally parsed die roll term
+  with the numerical result of the mathematical evaluation and random number
+  generation for that term.
+  """
 
 class Die
+  """
+  A die is a combination of a multiplier and a number of sides, such as
+  1D6 for a single roll of a 6-sided die or 3D10 for 3 successive and
+  summed rolls of a 10-sided die.
+  """
   let _multiplier: I8
   let _sides: U8
 
@@ -29,6 +44,9 @@ class Die
     _multiplier 
 
 class RollTerm
+  """
+  A roll term represents a single component within a larger die roll expression
+  """
   var _term: String ref
   var _termvalue: TermValue = 0
 
@@ -54,6 +72,12 @@ class RollTerm
     _termvalue.string() 
 
 class Roll
+  """
+  Roll is an abstraction around a die roll expression. Every time a roll
+  is created it computes the sum of the contained roll expressions by
+  rolling the dice (random number generation) and simple addition on the
+  constant value terms 
+  """
   let _expression: String
   let _values: Array[EvaluatedTerm]  
   let _sum: I64 
@@ -82,6 +106,12 @@ class Roll
     _sum 
 
 class Roller  
+  """
+  Roller is the main interface into D20. To use it, create an instance of 
+  roller with a supplied die roll expression like `3d10+5`. Every time you
+  invoke `roll` thereafter, the virtual dice will be rolled and the expression
+  will be re-evaluated.
+  """
   let _terms : Array[RollTerm]
   let _expression: String 
   
